@@ -13,7 +13,7 @@ def load_train_val_data():
         image = cv2.imread (myFile,0)
         train.append (image)
         train_labels.append(1)
-        files = glob.glob ("jaffe2/train/NEG/*.tiff")
+    files = glob.glob ("jaffe2/train/NEG/*.tiff")
     for myFile in files:
         image = cv2.imread (myFile,0)
         train.append (image)

@@ -8,12 +8,12 @@ def load_train_val_data():
     #Train data
     train = []
     train_labels = []
-    files = glob.glob ("jaffe2/train/POS/*.tiff") # your image path
+    files = glob.glob ("../../fer2013_binary/training/positive/*.jpg") # your image path
     for myFile in files:
         image = cv2.imread (myFile,0)
         train.append (image)
         train_labels.append(1)
-    files = glob.glob ("jaffe2/train/NEG/*.tiff")
+    files = glob.glob ("../../fer2013_binary/training/negative/*.jpg")
     for myFile in files:
         image = cv2.imread (myFile,0)
         train.append (image)
@@ -22,6 +22,10 @@ def load_train_val_data():
     train_labels = np.array(train_labels,dtype='int') #as mnist
 # convert (number of images x height x width x number of channels) to (number of images x (height * width *3))
 # for example (120 * 40 * 40 * 3)-> (120 * 4800)
+    print(train.shape[0])
+    print(train.shape[1])
+    print(train.shape[2])
+
     train = np.reshape(train,[train.shape[0],train.shape[1]*train.shape[2]])
 
 # save numpy array as .npy formats
@@ -31,12 +35,12 @@ def load_train_val_data():
 #Test data
     test = []
     test_labels = []
-    files = glob.glob ("jaffe2/validation/POS/*.tiff")
+    files = glob.glob ("../../fer2013_binary2/validation/positive/*.jpg")
     for myFile in files:
         image = cv2.imread (myFile,0)
         test.append (image)
         test_labels.append(1) # class1
-    files = glob.glob ("jaffe2/validation/NEG/*.tiff")
+    files = glob.glob ("../../fer2013_binary2/validation/negative/*.jpg")
     for myFile in files:
         image = cv2.imread (myFile,0)
         test.append (image)
@@ -45,4 +49,5 @@ def load_train_val_data():
     test = np.array(test,dtype='float32') #as mnist example
     test_labels = np.array(test_labels,dtype='int') #as mnist
     test = np.reshape(test,[test.shape[0],test.shape[1]*test.shape[2]])
+
     return (train, train_labels,test,test_labels)

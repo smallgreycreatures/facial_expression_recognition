@@ -6,16 +6,11 @@ from keras import backend as K
 from keras import optimizers
 from PIL import Image
 import numpy as np
+import cv2
+import glob
 
 # dimensions of our images.
 img_width, img_height = 256, 256
-
-train_data_dir = 'jaffe2/train'
-validation_data_dir = 'jaffe2/validation'
-nb_train_samples = 400
-nb_validation_samples = 100
-epochs = 12
-batch_size = 16
 
 if K.image_data_format() == 'channels_first':
     input_shape = (3, img_width, img_height)
@@ -47,32 +42,15 @@ model.compile(loss='binary_crossentropy',		#does not suffer from slow convergenc
               optimizer='rmsprop',
               metrics=['accuracy'])
 
-# this is the augmentation configuration we will use for training
-train_datagen = ImageDataGenerator(
-    rescale=1. / 255,
-    shear_range=0.2,
-    zoom_range=0.2,
-    horizontal_flip=True)
+model.summary()
+model.load_weights('jaffe_cnn.h5')
 
-test_datagen = ImageDataGenerator(rescale=1. / 255)
+files = glob.glob ("jaffe2/validation/POS/*.tiff") # your image path
+# predicting images
+img = image.load_img('jaffe2/validation/POS/KA.HA4.32.tiff', target_size=(img_width, img_height))
+x = image.img_to_array(img)
+x = np.expand_dims(x, axis=0)
 
-train_generator = train_datagen.flow_from_directory(
-    train_data_dir,
-    target_size=(img_width, img_height),
-    batch_size=batch_size,
-    class_mode='binary')
-
-validation_generator = test_datagen.flow_from_directory(
-    validation_data_dir,
-    target_size=(img_width, img_height),
-    batch_size=batch_size,
-    class_mode='binary')
-
-model.fit_generator(
-    train_generator,
-    steps_per_epoch=nb_train_samples // batch_size,
-    epochs=epochs,
-    validation_data=validation_generator,
-    validation_steps=nb_validation_samples // batch_size)
-
-model.save_weights('first_try.h5')
+images = np.vstack([x])
+classes = model.predict_classes(images, batch_size=10)
+print classes
