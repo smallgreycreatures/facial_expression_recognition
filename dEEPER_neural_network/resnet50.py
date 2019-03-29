@@ -193,7 +193,7 @@ train_data_dir = '../../fer2013_binary/training'
 validation_data_dir = '../../fer2013_binary/validation'
 nb_train_samples = 20000
 nb_validation_samples = 3000
-epochs = 10
+epochs = 100
 batch_size = 32
 
 if K.image_data_format() == 'channels_first':

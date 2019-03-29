@@ -271,6 +271,15 @@ def inception_v4(num_classes, dropout_keep_prob, weights, include_top):
         x = Flatten()(x)
         # 1536
         x = Dense(units=num_classes, activation='sigmoid')(x)
+    x = Flatten()(x)
+    x = Dense(1, activation='sigmoid')(x)
+    #x =
+    #model.add(Flatten())
+    #model.add(Dense(256))
+    #model.add(Activation('relu'))
+    #model.add(Dropout(0.5))
+    #model.add(Dense(1))
+    #model.add(Activation('sigmoid')) #sigmoid instead of softmax because of two classes
 
     model = Model(inputs, x, name='inception_v4')
 
@@ -310,12 +319,18 @@ img_width, img_height = 48, 48
 
 train_data_dir = '../../fer2013_binary/training'
 validation_data_dir = '../../fer2013_binary/validation'
-nb_train_samples = 1000
-nb_validation_samples = 300
-epochs = 10
+nb_train_samples = 20000
+nb_validation_samples = 3000
+epochs = 100
 batch_size = 32
-model = create_model()
+model = create_model(weights='imagenet', include_top=False)
 optimizers.Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+#model.add(Flatten())
+#model.add(Dense(256))
+#model.add(Activation('relu'))
+#model.add(Dropout(0.5))
+#model.add(Dense(1))
+#model.add(Activation('sigmoid')) #sigmoid instead of softmax because of two classes
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
